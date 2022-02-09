@@ -1,28 +1,25 @@
 const router = require('express').Router(); 
-const { createNewNote } = require('../../lib/notes');
-const { notes } = require('../../db/db');
+// const { createNewNote } = require('../../lib/notes');
+const noteArr = require('../../db/db');
+const fs = require('fs')
 
 router.get('/notes', (req, res) => {
-    let results = notes;
-    // if (req.query) {
-    //   results = filterByQuery(req.query, results);
-    // }
-    res.json(results);
-  });
+    // use fs to read in the notes from the db.json file
+    let noteData = JSON.parse(fs.readFileSync('/Users/racheldenton/Desktop/bootcamp/Challenges/Challenge11/Develop/db/db.json', 'utf8'))
+    // return response to be the notes data
+    res.json(noteData);
+    });
 
 router.post('/notes', (req, res) => {
-    // set id based on what the next index of the array will be
-    // req.body.id = animals.length.toString();
+    console.log(req.body)
+    // using destructuring to assign variables
+    const { title, text } = req.body;
+    // take info from note and create new note object
+    let newNote = {
+        title,
+        text
+    }
 
-    const note = createNewNote(req.body, notes);
-    res.json(note);
-
-    // if (!validateAnimal(req.body)) {
-    //   res.status(400).send('The animal is not properly formatted.');
-    // } else {
-    //   const animal = createNewAnimal(req.body, animals);
-    //   res.json(animal);
-    // }
   });
   
   module.exports = router;
